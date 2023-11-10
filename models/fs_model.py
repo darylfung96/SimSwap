@@ -42,13 +42,11 @@ class fsModel(BaseModel):
 
         return loss_filter
 
-    def initialize(self, opt):
+    def initialize(self, opt, device):
         BaseModel.initialize(self, opt)
         if opt.resize_or_crop != 'none' or not opt.isTrain:  # when training at full res this causes OOM
             torch.backends.cudnn.benchmark = True
         self.isTrain = opt.isTrain
-
-        device = torch.device("cuda:0")
 
         if opt.crop_size == 224:
             from .fs_networks import Generator_Adain_Upsample, Discriminator
