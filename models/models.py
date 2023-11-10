@@ -6,12 +6,12 @@ from torch.nn import Parameter
 from .config import device, num_classes
 
 
-def create_model(opt):
+def create_model(opt, device):
     #from .pix2pixHD_model import Pix2PixHDModel, InferenceModel
     from .fs_model import fsModel
     model = fsModel()
 
-    model.initialize(opt)
+    model.initialize(opt, device)
     if opt.verbose:
         print("model [%s] was created" % (model.name()))
 
