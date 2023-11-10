@@ -54,7 +54,7 @@ def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_r
     if  os.path.exists(temp_results_dir):
             shutil.rmtree(temp_results_dir)
 
-    spNorm =SpecificNorm()
+    spNorm =SpecificNorm(device=device)
     if use_mask:
         n_classes = 19
         net = BiSeNet(n_classes=n_classes)
