@@ -56,10 +56,10 @@ class SoftErosion(nn.Module):
         return x, mask
 
 
-def postprocess(swapped_face, target, target_mask,smooth_mask):
+def postprocess(swapped_face, target, target_mask,smooth_mask, device='cpu'):
     # target_mask = cv2.resize(target_mask, (self.size,  self.size))
 
-    mask_tensor = torch.from_numpy(target_mask.copy().transpose((2, 0, 1))).float().mul_(1/255.0).cuda()
+    mask_tensor = torch.from_numpy(target_mask.copy().transpose((2, 0, 1))).float().mul_(1/255.0).to(device)
     face_mask_tensor = mask_tensor[0] + mask_tensor[1]
     
     soft_face_mask_tensor, _ = smooth_mask(face_mask_tensor.unsqueeze_(0).unsqueeze_(0))
@@ -112,7 +112,7 @@ def reverse2wholeimage(b_align_crop_tenor_list,swaped_imgs, mats, crop_size, ori
                 # face_mask_tensor = tgt_mask[...,0] + tgt_mask[...,1]
                 target_mask = cv2.resize(tgt_mask, (crop_size,  crop_size))
                 # print(source_img)
-                target_image_parsing = postprocess(swaped_img, source_img[0].cpu().detach().numpy().transpose((1, 2, 0)), target_mask,smooth_mask)
+                target_image_parsing = postprocess(swaped_img, source_img[0].cpu().detach().numpy().transpose((1, 2, 0)), target_mask,smooth_mask, device)
                 
 
                 target_image = cv2.warpAffine(target_image_parsing, mat_rev, orisize)
