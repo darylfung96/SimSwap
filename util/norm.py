@@ -2,7 +2,7 @@ import torch.nn as nn
 import numpy as np
 import torch
 class SpecificNorm(nn.Module):
-    def __init__(self, epsilon=1e-8, device='cpu):
+    def __init__(self, epsilon=1e-8, device='cpu'):
         """
             @notice: avoid in-place ops.
             https://discuss.pytorch.org/t/encounter-the-runtimeerror-one-of-the-variables-needed-for-gradient-computation-has-been-modified-by-an-inplace-operation/836/3
