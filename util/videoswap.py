@@ -21,6 +21,7 @@ import  time
 from util.add_watermark import watermark_image
 from util.norm import SpecificNorm
 from parsing_model.model import BiSeNet
+import torch_xla.utils.serialization as xser
 
 def _totensor(array):
     tensor = torch.from_numpy(array)
@@ -60,7 +61,11 @@ def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_r
         net = BiSeNet(n_classes=n_classes)
         net.to(device)
         save_pth = os.path.join('./parsing_model/checkpoint', '79999_iter.pth')
-        net.load_state_dict(torch.load(save_pth, map_location=device))
+
+        if (hasattr(device, 'type') and device.type == 'xla'):
+            net.load_state_dict(xser.load(save_pth))
+        else:
+            net.load_state_dict(torch.load(save_pth, map_location=device))
         net.eval()
     else:
         net =None
