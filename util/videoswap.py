@@ -27,7 +27,7 @@ def _totensor(array):
     img = tensor.transpose(0, 1).transpose(0, 2).contiguous()
     return img.float().div(255)
 
-def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_results_dir='./temp_results', crop_size=224, no_simswaplogo = False,use_mask =False):
+def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_results_dir='./temp_results', crop_size=224, no_simswaplogo = False,use_mask =False, device='cpu'):
     video_forcheck = VideoFileClip(video_path)
     if video_forcheck.audio is None:
         no_audio = True
@@ -58,7 +58,7 @@ def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_r
     if use_mask:
         n_classes = 19
         net = BiSeNet(n_classes=n_classes)
-        net.cuda()
+        net.to(device)
         save_pth = os.path.join('./parsing_model/checkpoint', '79999_iter.pth')
         net.load_state_dict(torch.load(save_pth))
         net.eval()
@@ -84,7 +84,7 @@ def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_r
                     # BGR TO RGB
                     # frame_align_crop_RGB = frame_align_crop[...,::-1]
 
-                    frame_align_crop_tenor = _totensor(cv2.cvtColor(frame_align_crop,cv2.COLOR_BGR2RGB))[None,...].cuda()
+                    frame_align_crop_tenor = _totensor(cv2.cvtColor(frame_align_crop,cv2.COLOR_BGR2RGB))[None,...].to(device)
 
                     swap_result = swap_model(None, frame_align_crop_tenor, id_vetor, None, True)[0]
                     cv2.imwrite(os.path.join(temp_results_dir, 'frame_{:0>7d}.jpg'.format(frame_index)), frame)
