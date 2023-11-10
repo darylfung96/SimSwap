@@ -73,12 +73,12 @@ def postprocess(swapped_face, target, target_mask,smooth_mask):
     return result
 
 def reverse2wholeimage(b_align_crop_tenor_list,swaped_imgs, mats, crop_size, oriimg, logoclass, save_path = '', \
-                    no_simswaplogo = False,pasring_model =None,norm = None, use_mask = False):
+                    no_simswaplogo = False,pasring_model =None,norm = None, use_mask = False, device='cpu'):
 
     target_image_list = []
     img_mask_list = []
     if use_mask:
-        smooth_mask = SoftErosion(kernel_size=17, threshold=0.9, iterations=7).cuda()
+        smooth_mask = SoftErosion(kernel_size=17, threshold=0.9, iterations=7).to(device)
     else:
         pass
 
