@@ -88,7 +88,7 @@ def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_r
                     # BGR TO RGB
                     # frame_align_crop_RGB = frame_align_crop[...,::-1]
 
-                    frame_align_crop_tenor = _totensor(cv2.cvtColor(frame_align_crop,cv2.COLOR_BGR2RGB))[None,...].to(device)
+                    frame_align_crop_tenor = _totensor(cv2.cvtColor(frame_align_crop,cv2.COLOR_BGR2RGB))[None,...].to(device).half()
 
                     swap_result = swap_model(None, frame_align_crop_tenor, id_vetor, None, True)[0]
                     cv2.imwrite(os.path.join(temp_results_dir, 'frame_{:0>7d}.jpg'.format(frame_index)), frame)
