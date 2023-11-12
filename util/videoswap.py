@@ -86,7 +86,7 @@ def video_swap(video_path, id_vetor, swap_model, detect_model, save_path, temp_r
 
                 # convert swap_model to jit 
                 frame_align_crop_tenor = _totensor(cv2.cvtColor(frame_align_crop_list[0],cv2.COLOR_BGR2RGB))[None,...].to(device).half()
-                swap_model = torch.jit.trace(swap_model, (None, frame_align_crop_tenor, id_vetor, None, True))
+                swap_model = torch.jit.trace(swap_model, example_inputs=(None, frame_align_crop_tenor, id_vetor, None, True))
 
                 for frame_align_crop in frame_align_crop_list:
 
